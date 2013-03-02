@@ -142,7 +142,14 @@ PLUGIN_EXPORT void Reload(void* data, void* rm, double* maxValue)
 	{
 		PyObject *rainmeterObject = CreateRainmeterObject(rm);
 		PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Reload", "Od", rainmeterObject, maxValue);
-		Py_XDECREF(resultObj);
+		if (resultObj != NULL)
+		{
+			Py_DECREF(resultObj);
+		}
+		else
+		{
+			PyErr_Clear();
+		}
 		Py_DECREF(rainmeterObject);
 	}
 
@@ -158,7 +165,15 @@ PLUGIN_EXPORT double Update(void* data)
 	}
 	PyEval_RestoreThread(measure->pyThreadState);
 	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Update", NULL);
-	double result = resultObj && PyFloat_Check(resultObj) ? PyFloat_AsDouble(resultObj) : 0.0;
+	double result = 0.0;
+	if (resultObj != NULL)
+	{
+		result = PyFloat_Check(resultObj) ? PyFloat_AsDouble(resultObj) : 0.0;
+	}
+	else
+	{
+		PyErr_Clear();
+	}
 	Py_XDECREF(resultObj);
 	PyEval_SaveThread();
 	return result;
@@ -189,6 +204,10 @@ PLUGIN_EXPORT LPCWSTR GetString(void* data)
 		}
 		Py_DECREF(resultObj);
 	}
+	else
+	{
+		PyErr_Clear();
+	}
 	PyEval_SaveThread();
 	return measure->getStringResult;
 }
@@ -204,7 +223,14 @@ PLUGIN_EXPORT void ExecuteBang(void* data, LPCWSTR args)
 	PyEval_RestoreThread(measure->pyThreadState);
 	PyObject *argsObj = PyUnicode_FromWideChar(args, -1);
 	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "ExecuteBang", "O", argsObj);
-	Py_XDECREF(resultObj);
+	if (resultObj != NULL)
+	{
+		Py_DECREF(resultObj);
+	}
+	else
+	{
+		PyErr_Clear();
+	}
 	Py_DECREF(argsObj);
 	PyEval_SaveThread();
 }
@@ -216,7 +242,15 @@ PLUGIN_EXPORT void Finalize(void* data)
 	if (measure->measureObject != NULL)
 	{
 		PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Finalize", NULL);
-		Py_XDECREF(resultObj);
+		if (resultObj != NULL)
+		{
+			Py_DECREF(resultObj);
+		}
+		else
+		{
+			PyErr_Clear();
+		}
+
 		if (measure->getStringResult != NULL)
 		{
 			PyMem_Free(measure->getStringResult);
