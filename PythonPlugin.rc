@@ -1,0 +1,34 @@
+#include <VerRsrc.h>
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS VS_FF_DEBUG
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_DLL
+ FILESUBTYPE VFT_UNKNOWN
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904E4"
+        {
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "LegalCopyright", "© 2013 - Johannes Blume"
+            VALUE "ProductName", "Rainmeter"
+#ifdef _WIN64
+            VALUE "ProductVersion", "1.0.0.0 (64-bit)"
+#else
+            VALUE "ProductVersion", "1.0.0.0 (32-bit)"
+#endif //_WIN64
+        }
+    }
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x409, 1252
+    }
+}
