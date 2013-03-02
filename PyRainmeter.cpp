@@ -41,7 +41,7 @@ typedef struct RainmeterObject {
 static PyObject *Rainmeter_RmReadString(RainmeterObject *self, PyObject *args)
 {
 	PyObject *option, *defValue;
-	bool replaceMeasures;
+	int replaceMeasures;
 	PyArg_ParseTuple(args, "UUp", &option, &defValue, &replaceMeasures);
 	wchar_t *optionStr = PyUnicode_AsWideCharString(option, NULL);
 	wchar_t *defValueStr = PyUnicode_AsWideCharString(defValue, NULL);

@@ -105,6 +105,7 @@ void LoadScript(LPCWSTR scriptPath, char* fileName, LPCWSTR className, Measure* 
 		}
 
 		measure->measureObject = measureObj;
+		measure->getStringResult = NULL;
 	}
 	catch (wchar_t *error)
 	{
@@ -140,7 +141,7 @@ PLUGIN_EXPORT void Reload(void* data, void* rm, double* maxValue)
 	if (measure->measureObject != NULL)
 	{
 		PyObject *rainmeterObject = CreateRainmeterObject(rm);
-		PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Reload", "Nd", rainmeterObject, maxValue);
+		PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Reload", "Od", rainmeterObject, maxValue);
 		Py_XDECREF(resultObj);
 		Py_DECREF(rainmeterObject);
 	}
@@ -202,7 +203,7 @@ PLUGIN_EXPORT void ExecuteBang(void* data, LPCWSTR args)
 
 	PyEval_RestoreThread(measure->pyThreadState);
 	PyObject *argsObj = PyUnicode_FromWideChar(args, -1);
-	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "ExecuteBang", "N", argsObj);
+	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "ExecuteBang", "O", argsObj);
 	Py_XDECREF(resultObj);
 	Py_DECREF(argsObj);
 	PyEval_SaveThread();
