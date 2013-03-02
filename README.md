@@ -52,6 +52,7 @@ Measure=Plugin
 Plugin=Plugins\Python.dll
 ScriptPath=IMAP.py
 PythonHome=c:\Python33
+ClassName=Measure
 UpdateDivider=60
 Username=username
 Password=password
@@ -73,5 +74,7 @@ class Measure:
         con.login(self.username, self.password)
         con.select('INBOX', True)
         _, msgnums = con.search(None, '(UNSEEN)')
+        con.close()
+        con.logout()
         return float(len(msgnums[0].split()))
 ```
