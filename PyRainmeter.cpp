@@ -195,6 +195,7 @@ PyObject* CreateRainmeterObject(void *rm)
 	{
 		PyType_Ready(&rainmeterType);
 	}
+	Py_INCREF(&rainmeterType);
 	RainmeterObject *obj = PyObject_New(RainmeterObject, &rainmeterType);
 	obj->rm = rm;
 	return (PyObject*) obj;
