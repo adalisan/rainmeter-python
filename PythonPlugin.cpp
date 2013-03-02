@@ -158,7 +158,7 @@ PLUGIN_EXPORT double Update(void* data)
 	}
 	PyEval_RestoreThread(measure->pyThreadState);
 	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Update", NULL);
-	double result = PyFloat_Check(resultObj) ? PyFloat_AsDouble(resultObj) : 0.0;
+	double result = resultObj && PyFloat_Check(resultObj) ? PyFloat_AsDouble(resultObj) : 0.0;
 	Py_XDECREF(resultObj);
 	PyEval_SaveThread();
 	return result;
