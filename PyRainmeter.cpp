@@ -193,10 +193,10 @@ PyObject* CreateRainmeterObject(void *rm)
 {
 	if (!(rainmeterType.tp_flags & Py_TPFLAGS_READY))
 	{
+		rainmeterType.tp_new = PyType_GenericNew;
 		PyType_Ready(&rainmeterType);
 	}
-	Py_INCREF(&rainmeterType);
-	RainmeterObject *obj = PyObject_New(RainmeterObject, &rainmeterType);
-	obj->rm = rm;
+	PyObject *obj = PyObject_CallObject((PyObject*) &rainmeterType, NULL);
+	((RainmeterObject*)obj)->rm = rm;
 	return (PyObject*) obj;
 }

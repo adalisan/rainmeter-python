@@ -169,12 +169,12 @@ PLUGIN_EXPORT double Update(void* data)
 	if (resultObj != NULL)
 	{
 		result = PyFloat_Check(resultObj) ? PyFloat_AsDouble(resultObj) : 0.0;
+		Py_DECREF(resultObj);
 	}
 	else
 	{
 		PyErr_Clear();
 	}
-	Py_XDECREF(resultObj);
 	PyEval_SaveThread();
 	return result;
 }
