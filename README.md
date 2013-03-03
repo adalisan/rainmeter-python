@@ -63,10 +63,10 @@ Host=mail.com
 import imaplib
 
 class Measure:
-    def Reload(self, nm, maxValue):
-        self.host = nm.RmReadString('Host', 'example.com', False)
-        self.username = nm.RmReadString('Username', 'user', False)
-        self.password = nm.RmReadString('Password', 'pass', False)
+    def Reload(self, rm, maxValue):
+        self.host = rm.RmReadString('Host', 'example.com', False)
+        self.username = rm.RmReadString('Username', 'user', False)
+        self.password = rm.RmReadString('Password', 'pass', False)
 
     def Update(self):
         con = imaplib.IMAP4(self.host)
