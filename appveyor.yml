@@ -53,7 +53,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: olbMvHpayGgqvdAdimUIJQ5W33juPyQ3jU+UgIEr81pZq8qt5S+U+crMr1kmEWD6
-  artifact: release-dlls
+  artifact: RainmeterPython-v$(appveyor_build_version)-$(PYTHON_VERSION)
 artifacts:
 - path: release-dlls
-  name: RainmeterPython-$(PYTHON_VERSION)
+  name: RainmeterPython-v$(appveyor_build_version)-$(PYTHON_VERSION)
