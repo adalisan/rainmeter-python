@@ -19,7 +19,7 @@
 #include <Windows.h>
 #include <Python.h>
 #include "structmember.h"
-#include "../../API/RainmeterAPI.h"
+#include "rainmeter-plugin-sdk/API/RainmeterAPI.h"
 
 typedef struct RainmeterObject {
 	PyObject_HEAD

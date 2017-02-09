@@ -18,7 +18,7 @@
 
 #include <Windows.h>
 #include <Python.h>
-#include "../../API/RainmeterAPI.h"
+#include "./rainmeter-plugin-sdk/API/RainmeterAPI.h"
 
 PyObject* CreateRainmeterObject(void *rm);
 
