@@ -30,6 +30,8 @@ build_script:
 
     if not exist "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%" mkdir "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%"
     
+    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %BUILD_PLATFORM%
+    
     set "INCLUDE=%PYTHON%\include;%INCLUDE%"
 
     echo %INCLUDE%
