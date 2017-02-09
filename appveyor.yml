@@ -5,25 +5,25 @@ environment:
       BUILD_DIR: "x32"
       ARCH: "x86"
       BUILD_PLATFORM: "win32"
-      PYTHON_VERSION: "3.4"
+      PYTHON_VERSION: "34"
     - PYTHON: "C:\\Python34-x64"
       BUILD_ENV: "Visual Studio 14 Win64"
       BUILD_DIR: "x64"
       ARCH: "x64"
       BUILD_PLATFORM: "x64"
-      PYTHON_VERSION: "3.4"
+      PYTHON_VERSION: "34-x64"
     - PYTHON: "C:\\Python35"
       BUILD_ENV: "Visual Studio 14"
       BUILD_DIR: "x32"
       ARCH: "x86"
       BUILD_PLATFORM: "win32"
-      PYTHON_VERSION: "3.5"
+      PYTHON_VERSION: "35"
     - PYTHON: "C:\\Python35-x64"
       BUILD_ENV: "Visual Studio 14 Win64"
       BUILD_DIR: "x64"
       ARCH: "x64"
       BUILD_PLATFORM: "x64"
-      PYTHON_VERSION: "3.5"
+      PYTHON_VERSION: "35-x64"
 
 install:
 - cmd: >-
@@ -47,6 +47,13 @@ build_script:
     mkdir release-dlls
     xcopy "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%\release\*.dll" .\release-dlls\ /I
 
+deploy:
+  release: Rainmeter-Python-v$(appveyor_build_version)
+  description: 'Test release'
+  provider: GitHub
+  auth_token:
+    secure: olbMvHpayGgqvdAdimUIJQ5W33juPyQ3jU+UgIEr81pZq8qt5S+U+crMr1kmEWD6
+  artifact: release-dlls
 artifacts:
 - path: release-dlls
-  name: dlls
+  name: RainmeterPython-$(PYTHON_VERSION)
