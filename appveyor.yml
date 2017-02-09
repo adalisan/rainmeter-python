@@ -1,3 +1,5 @@
+version: '1.0.{build}'
+
 environment:
   matrix:
     - PYTHON: "C:\\Python34"
@@ -49,11 +51,11 @@ build_script:
 
 deploy:
   release: Rainmeter-Python-v$(appveyor_build_version)
-  description: 'Test release'
+  description: 'Automated Build Release'
   provider: GitHub
   auth_token:
     secure: olbMvHpayGgqvdAdimUIJQ5W33juPyQ3jU+UgIEr81pZq8qt5S+U+crMr1kmEWD6
-  artifact: RainmeterPython-v$(appveyor_build_version)-$(PYTHON_VERSION)
+  artifact: RainmeterPython-v$(appveyor_build_version)-Python$(PYTHON_VERSION)
 artifacts:
 - path: release-dlls
-  name: RainmeterPython-v$(appveyor_build_version)-$(PYTHON_VERSION)
+  name: RainmeterPython-v$(appveyor_build_version)-Python$(PYTHON_VERSION)
