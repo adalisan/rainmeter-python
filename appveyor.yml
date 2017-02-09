@@ -32,6 +32,8 @@ build_script:
     
     set "INCLUDE=%PYTHON%\include;%INCLUDE%"
 
+    echo %INCLUDE%
+
     msbuild RainmeterPython.sln /p:configuration=release /p:platform=%BUILD_PLATFORM% /p:AdditionalLibPaths="%PYTHON%\libs"
     
     mkdir release-dlls
