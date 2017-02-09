@@ -34,7 +34,7 @@ build_script:
 
     echo %INCLUDE%
 
-    msbuild RainmeterPython.vcxproj /p:configuration=release /p:platform=%BUILD_PLATFORM% /p:AdditionalLibPaths="%PYTHON%\libs" /v:d
+    msbuild RainmeterPython.vcxproj /p:configuration=release /p:platform=%BUILD_PLATFORM% /p:AdditionalLibPaths="%PYTHON%\libs" /p:useenv=true /v:d
     
     mkdir release-dlls
     xcopy "%APPVEYOR_BUILD_FOLDER%\opencv\%BUILD_DIR%\bin\Release\*.dll" .\release-dlls\ /I
