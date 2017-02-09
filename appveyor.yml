@@ -3,21 +3,25 @@ environment:
     - PYTHON: "C:\\Python34"
       BUILD_ENV: "Visual Studio 14"
       BUILD_DIR: "build"
+      ARCH: "x86"
       BUILD_PLATFORM: "win32"
       PYTHON_VERSION: "3.4"
     - PYTHON: "C:\\Python34-x64"
       BUILD_ENV: "Visual Studio 14 Win64"
       BUILD_DIR: "build64"
+      ARCH: "x64"
       BUILD_PLATFORM: "x64"
       PYTHON_VERSION: "3.4"
     - PYTHON: "C:\\Python35"
       BUILD_ENV: "Visual Studio 14"
       BUILD_DIR: "build"
+      ARCH: "x86"
       BUILD_PLATFORM: "win32"
       PYTHON_VERSION: "3.5"
     - PYTHON: "C:\\Python35-x64"
       BUILD_ENV: "Visual Studio 14 Win64"
       BUILD_DIR: "build64"
+      ARCH: "x64"
       BUILD_PLATFORM: "x64"
       PYTHON_VERSION: "3.5"
 
@@ -30,13 +34,15 @@ build_script:
 
     if not exist "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%" mkdir "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%"
     
-    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %BUILD_PLATFORM%
+    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
     
     set "INCLUDE=%PYTHON%\include;%INCLUDE%"
+    set "LIB=%PYTHON%\libs;%LIB%"
 
     echo %INCLUDE%
+    echo %LIB%
 
-    msbuild RainmeterPython.vcxproj /p:configuration=release /p:platform=%BUILD_PLATFORM% /p:AdditionalLibPaths="%PYTHON%\libs" /p:useenv=true /v:d
+    msbuild RainmeterPython.vcxproj /p:configuration=release /p:platform=%BUILD_PLATFORM% /p:useenv=true /v:d
     
     mkdir release-dlls
     xcopy "%APPVEYOR_BUILD_FOLDER%\opencv\%BUILD_DIR%\bin\Release\*.dll" .\release-dlls\ /I
