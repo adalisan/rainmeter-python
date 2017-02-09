@@ -1,0 +1,37 @@
+environment:
+  matrix:
+    - PYTHON: "C:\\Python34"
+      BUILD_ENV: "Visual Studio 14"
+      BUILD_DIR: "build"
+      PYTHON_VERSION: "3.4"
+    - PYTHON: "C:\\Python34-x64"
+      BUILD_ENV: "Visual Studio 14 Win64"
+      BUILD_DIR: "build64"
+      PYTHON_VERSION: "3.4"
+    - PYTHON: "C:\\Python35"
+      BUILD_ENV: "Visual Studio 14"
+      BUILD_DIR: "build"
+      PYTHON_VERSION: "3.5"
+    - PYTHON: "C:\\Python35-x64"
+      BUILD_ENV: "Visual Studio 14 Win64"
+      BUILD_DIR: "build64"
+      PYTHON_VERSION: "3.5"
+
+install:
+- cmd: >-
+    git submodule update --init --recursive
+
+build_script:
+- cmd: |-
+
+    if not exist "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%" mkdir "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%"
+
+    cmake -G "%BUILD_ENV%" -H"." -B"%BUILD_DIR%" -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DPYTHON3_EXECUTABLE="%PYTHON%/python.exe" -DPYTHON3_LIBRARY="%PYTHON%/libs/python3*.lib" -DPYTHON3_INCLUDE_DIR="%PYTHON%/include" -Wno-dev
+    
+    cd %BUILD_DIR%
+
+    cmake --build . --config Release
+
+artifacts:
+- path: "%APPVEYOR_BUILD_FOLDER%\opencv\%BUILD_DIR%\bin\Release\*.dll"
+  name: dlls
