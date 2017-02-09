@@ -2,25 +2,25 @@ environment:
   matrix:
     - PYTHON: "C:\\Python34"
       BUILD_ENV: "Visual Studio 14"
-      BUILD_DIR: "build"
+      BUILD_DIR: "x32"
       ARCH: "x86"
       BUILD_PLATFORM: "win32"
       PYTHON_VERSION: "3.4"
     - PYTHON: "C:\\Python34-x64"
       BUILD_ENV: "Visual Studio 14 Win64"
-      BUILD_DIR: "build64"
+      BUILD_DIR: "x64"
       ARCH: "x64"
       BUILD_PLATFORM: "x64"
       PYTHON_VERSION: "3.4"
     - PYTHON: "C:\\Python35"
       BUILD_ENV: "Visual Studio 14"
-      BUILD_DIR: "build"
+      BUILD_DIR: "x32"
       ARCH: "x86"
       BUILD_PLATFORM: "win32"
       PYTHON_VERSION: "3.5"
     - PYTHON: "C:\\Python35-x64"
       BUILD_ENV: "Visual Studio 14 Win64"
-      BUILD_DIR: "build64"
+      BUILD_DIR: "x64"
       ARCH: "x64"
       BUILD_PLATFORM: "x64"
       PYTHON_VERSION: "3.5"
@@ -45,7 +45,7 @@ build_script:
     msbuild RainmeterPython.vcxproj /p:configuration=release /p:platform=%BUILD_PLATFORM% /p:useenv=true /v:d
     
     mkdir release-dlls
-    xcopy "%APPVEYOR_BUILD_FOLDER%\opencv\%BUILD_DIR%\bin\Release\*.dll" .\release-dlls\ /I
+    xcopy "%APPVEYOR_BUILD_FOLDER%\%BUILD_DIR%\release\*.dll" .\release-dlls\ /I
 
 artifacts:
 - path: release-dlls
