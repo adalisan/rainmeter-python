@@ -3,7 +3,7 @@ rainmeter-python
 
 Originally created by [jblume](https://github.com/jblume), now maintained by [glitchassassin](https://github.com/glitchassassin)
 
-Plugin for Rainmeter enabling Python 3 scripting
+Plugin for Rainmeter enabling Python 3.4/3.5 scripting
 
 Installation
 ------------
