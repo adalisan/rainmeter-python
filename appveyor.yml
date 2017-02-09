@@ -31,7 +31,10 @@ build_script:
     cd %BUILD_DIR%
 
     cmake --build . --config Release
+    cd ..
+    mkdir release-dlls
+    xcopy "%APPVEYOR_BUILD_FOLDER%\opencv\%BUILD_DIR%\bin\Release\*.dll" .\release-dlls\ /I
 
 artifacts:
-- path: "%APPVEYOR_BUILD_FOLDER%\opencv\%BUILD_DIR%\bin\Release\*.dll"
+- path: release-dlls
   name: dlls
