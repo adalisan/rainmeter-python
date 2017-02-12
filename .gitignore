@@ -11,3 +11,5 @@
 *.lai
 *.la
 *.a
+.vs/RainmeterPython/v14/.suo
+x64/Debug/*

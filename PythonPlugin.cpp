@@ -22,42 +22,32 @@
 
 PyObject* CreateRainmeterObject(void *rm);
 
-int interpreterCount = 0;
 PyThreadState *mainThreadState = NULL;
 
 struct Measure
 {
 	Measure()
 	{
-		pyThreadState = NULL;
 		measureObject = NULL;
 		getStringResult = NULL;
 	}
 
-	PyThreadState *pyThreadState;
 	PyObject *measureObject;
 	wchar_t *getStringResult;
 };
 
 PLUGIN_EXPORT void Initialize(void** data, void* rm)
 {
-	if (interpreterCount == 0)
+	LPCWSTR pythonHome = RmReadString(rm, L"PythonHome", NULL, FALSE);
+	if (pythonHome != NULL)
 	{
-		LPCWSTR pythonHome = RmReadString(rm, L"PythonHome", NULL, FALSE);
-		if (pythonHome != NULL)
-		{
-			Py_SetPythonHome((wchar_t*) pythonHome);
-		}
-		Py_Initialize();
-		PyEval_InitThreads();
-		mainThreadState = PyEval_SaveThread();
+		Py_SetPythonHome((wchar_t*) pythonHome);
 	}
-
-	PyEval_RestoreThread(mainThreadState);
+	Py_Initialize();
+	PyEval_InitThreads();
+	mainThreadState = PyThreadState_Get();
 	Measure *measure = new Measure;
-	measure->pyThreadState = Py_NewInterpreter();
 	*data = measure;
-	interpreterCount++;
 	PyEval_SaveThread();
 }
 
@@ -117,7 +107,7 @@ void LoadScript(LPCWSTR scriptPath, char* fileName, LPCWSTR className, Measure* 
 PLUGIN_EXPORT void Reload(void* data, void* rm, double* maxValue)
 {
 	Measure *measure = (Measure*) data;
-	PyEval_RestoreThread(measure->pyThreadState);
+	PyEval_RestoreThread(mainThreadState);
 
 	if (measure->measureObject == NULL)
 	{
@@ -163,7 +153,7 @@ PLUGIN_EXPORT double Update(void* data)
 	{
 		return 0.0;
 	}
-	PyEval_RestoreThread(measure->pyThreadState);
+	PyEval_RestoreThread(mainThreadState);
 	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Update", NULL);
 	double result = 0.0;
 	if (resultObj != NULL)
@@ -187,7 +177,7 @@ PLUGIN_EXPORT LPCWSTR GetString(void* data)
 		return measure->getStringResult;
 	}
 
-	PyEval_RestoreThread(measure->pyThreadState);
+	PyEval_RestoreThread(mainThreadState);
 	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "GetString", NULL);
 	if (measure->getStringResult != NULL)
 	{
@@ -220,7 +210,7 @@ PLUGIN_EXPORT void ExecuteBang(void* data, LPCWSTR args)
 		return;
 	}
 
-	PyEval_RestoreThread(measure->pyThreadState);
+	PyEval_RestoreThread(mainThreadState);
 	PyObject *argsObj = PyUnicode_FromWideChar(args, -1);
 	PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "ExecuteBang", "O", argsObj);
 	if (resultObj != NULL)
@@ -238,7 +228,7 @@ PLUGIN_EXPORT void ExecuteBang(void* data, LPCWSTR args)
 PLUGIN_EXPORT void Finalize(void* data)
 {
 	Measure *measure = (Measure*) data;
-	PyEval_RestoreThread(measure->pyThreadState);
+	PyEval_RestoreThread(mainThreadState);
 	if (measure->measureObject != NULL)
 	{
 		PyObject *resultObj = PyObject_CallMethod(measure->measureObject, "Finalize", NULL);
@@ -256,13 +246,6 @@ PLUGIN_EXPORT void Finalize(void* data)
 			PyMem_Free(measure->getStringResult);
 		}
 	}
-	Py_EndInterpreter(measure->pyThreadState);
 	delete measure;
-	PyEval_ReleaseLock();
-	interpreterCount--;
-	if (interpreterCount == 0)
-	{
-		PyEval_RestoreThread(mainThreadState);
-		Py_Finalize();
-	}
+	//Py_Finalize(); // Testing this without killing the interpreter to reset its status
 }
